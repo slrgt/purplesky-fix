@@ -1,0 +1,23 @@
+---
+/**
+ * Main entry: mounts the Preact app. All routing is client-side.
+ */
+import Layout from '../layouts/Layout.astro';
+---
+<Layout>
+  <main id="main-content" class="app-shell">
+    <div id="root"></div>
+    <script>
+      // Boot: mount Preact app when DOM is ready
+      async function boot() {
+        const { mountApp } = await import('../app/main');
+        mountApp(document.getElementById('root')!);
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', boot);
+      } else {
+        boot();
+      }
+    </script>
+  </main>
+</Layout>

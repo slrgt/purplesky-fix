@@ -1,43 +1,26 @@
 {
   "name": "purplesky",
   "private": true,
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
   "license": "AGPL-3.0-or-later",
-  "description": "Bluesky PWA with Qwik + Rust/WASM – feeds, forums, consensus, collaboration",
+  "description": "PurpleSky – Bluesky PWA with Astro (feeds, forums, consensus, collaboration)",
   "scripts": {
-    "dev": "vite --mode ssr",
-    "dev:subpath": "VITE_BASE_PATH=/purplesky/ vite --mode ssr",
-    "dev:debug": "node --inspect-brk ./node_modules/vite/bin/vite.js --mode ssr --force",
-    "build": "npm run build:wasm && qwik build",
-    "build.client": "vite build",
-    "build.server": "vite build -c adapters/static/vite.config.ts",
-    "build:wasm": "cd wasm && wasm-pack build --target web --out-dir ../src/wasm-pkg",
-    "build:static": "npm run build && npm run ssg",
-    "ssg": "node scripts/ssg.mjs",
-    "preview": "qwik build preview && vite preview --open",
-    "deploy": "npm run build:static",
-    "lint": "eslint \"src/**/*.{ts,tsx}\"",
-    "fmt": "prettier --write \"src/**/*.{ts,tsx,css}\"",
-    "start": "vite --open --mode ssr"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "start": "astro dev"
   },
   "dependencies": {
     "@atproto/api": "^0.18.20",
     "@atproto/oauth-client-browser": "^0.3.40",
-    "@builder.io/qwik": "^1.12.1",
-    "@builder.io/qwik-city": "^1.12.1",
-    "hls.js": "^1.6.15",
-    "vite-plugin-top-level-await": "^1.4.4",
-    "vite-plugin-wasm": "^3.4.1"
+    "@astrojs/preact": "^4.0.4",
+    "astro": "^5.0.3",
+    "preact": "^10.24.0"
   },
   "devDependencies": {
-    "@types/node": "^22.10.0",
-    "@typescript-eslint/eslint-plugin": "^8.55.0",
-    "@typescript-eslint/parser": "^8.55.0",
-    "eslint": "^9.15.0",
-    "prettier": "^3.4.2",
-    "typescript": "~5.7.2",
-    "vite": "^6.0.0"
+    "@astrojs/check": "^0.9.4",
+    "typescript": "~5.7.2"
   },
   "engines": {
     "node": ">=20"

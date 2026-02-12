@@ -1,18 +1,4 @@
-# ═══════════════════════════════════════════════════════════════════════════
-# GitHub Pages Deployment for PurpleSky
-# ═══════════════════════════════════════════════════════════════════════════
-#
-# This workflow:
-#  1. Optionally builds WASM (failure does not block deploy; app uses JS fallbacks)
-#  2. Installs Node.js dependencies
-#  3. Builds the Qwik app
-#  4. Prepares dist for GitHub Pages (handles both dist/ and dist/REPO_NAME/ output)
-#  5. Deploys to GitHub Pages
-#
-# HOW TO EDIT:
-#  - Deploy branch: edit "on.push.branches"
-#  - Base path is set from repo name automatically
-
+# Deploy PurpleSky (Astro) to GitHub Pages
 name: Deploy to GitHub Pages
 
 on:
@@ -35,20 +21,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Optional: build WASM for better performance. App works without it (JS fallbacks).
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: wasm32-unknown-unknown
-
-      - name: Install wasm-pack
-        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-
-      - name: Build WASM
-        run: cd wasm && wasm-pack build --target web --out-dir ../src/wasm-pkg
-        continue-on-error: true
-
-      # Set up Node.js
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -58,61 +30,26 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npx qwik build
+        run: npm run build
         env:
-          CI: true
-          NODE_OPTIONS: '--max-old-space-size=4096'
-          VITE_BASE_PATH: '/${{ github.event.repository.name }}/'
-          VITE_ORIGIN: 'https://${{ github.repository_owner }}.github.io'
+          ASTRO_BASE_PATH: '/${{ github.event.repository.name }}/'
+          ASTRO_ORIGIN: 'https://${{ github.repository_owner }}.github.io'
 
-      # Prepare output for GitHub Pages.
-      # Handles both: build output in dist/ (root) or in dist/REPO_NAME/
-      - name: Prepare dist
+      - name: Prepare for GitHub Pages
         run: |
           REPO_NAME="${{ github.event.repository.name }}"
           OWNER="${{ github.repository_owner }}"
           PAGES_URL="https://${OWNER}.github.io/${REPO_NAME}"
-          DEPLOY_DIR="dist/${REPO_NAME}"
-
-          echo "=== Pages URL: ${PAGES_URL} ==="
-          echo "=== Build output structure ==="
-          ls -la dist/ || true
-          ls -la dist/build 2>/dev/null || true
-
-          # If deploy dir already has index.html (Qwik emitted into base path), use it.
-          if [ -f "$DEPLOY_DIR/index.html" ]; then
-            echo "Using existing $DEPLOY_DIR (index.html present)"
+          # Astro outputs to dist/ (or dist/REPO_NAME when base is a segment)
+          if [ -f "dist/${REPO_NAME}/index.html" ]; then
+            DEPLOY_DIR="dist/${REPO_NAME}"
           else
-            # Build output is at dist/ root: create DEPLOY_DIR and copy assets.
-            echo "Creating $DEPLOY_DIR from dist/ root"
-            mkdir -p "$DEPLOY_DIR"
-            [ -f dist/index.html ] && cp dist/index.html "$DEPLOY_DIR/"
-            [ -d dist/build ] && cp -r dist/build "$DEPLOY_DIR/"
-            [ -f dist/q-manifest.json ] && cp dist/q-manifest.json "$DEPLOY_DIR/" 2>/dev/null || true
-            # Copy any other top-level files (manifest, icon, etc.)
-            for f in dist/*.json dist/*.svg dist/*.js dist/*.ico; do
-              [ -e "$f" ] && cp "$f" "$DEPLOY_DIR/" 2>/dev/null || true
-            done
+            DEPLOY_DIR="dist"
           fi
-
-          # Ensure build/ is under DEPLOY_DIR (Qwik may put it in dist/build)
-          if [ -d "dist/build" ] && [ ! -d "$DEPLOY_DIR/build" ]; then
-            cp -r dist/build "$DEPLOY_DIR/build"
-            echo "Copied dist/build to $DEPLOY_DIR/build"
-          fi
-
-          if [ ! -f "$DEPLOY_DIR/index.html" ]; then
-            echo "::error::No index.html in $DEPLOY_DIR"
-            exit 1
-          fi
-
-          # SPA fallback: 404.html = index.html for client-side routing
+          echo "Deploy dir: $DEPLOY_DIR"
+          ls -la "$DEPLOY_DIR"
           cp "$DEPLOY_DIR/index.html" "$DEPLOY_DIR/404.html"
-
-          # Required for GitHub Pages to serve JS/CSS/JSON correctly
           touch "$DEPLOY_DIR/.nojekyll"
-
-          # OAuth client metadata for Bluesky (must match Pages URL)
           cat > "$DEPLOY_DIR/client-metadata.json" <<EOJSON
           {
             "client_id": "${PAGES_URL}/client-metadata.json",
@@ -127,23 +64,13 @@ jobs:
             "dpop_bound_access_tokens": true
           }
           EOJSON
-          echo "Generated client-metadata.json for ${PAGES_URL}"
-
-          # Copy public assets if not already present (manifest, icon, sw)
           for f in manifest.json icon.svg sw.js; do
-            if [ -f "public/$f" ] && [ ! -f "$DEPLOY_DIR/$f" ]; then
-              cp "public/$f" "$DEPLOY_DIR/$f"
-              echo "Copied public/$f to $DEPLOY_DIR/"
-            fi
+            [ -f "public/$f" ] && [ ! -f "$DEPLOY_DIR/$f" ] && cp "public/$f" "$DEPLOY_DIR/$f"
           done
-
-          echo "=== Final $DEPLOY_DIR contents ==="
-          ls -la "$DEPLOY_DIR"
-          [ -d "$DEPLOY_DIR/build" ] && ls "$DEPLOY_DIR/build" | head -20
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/${{ github.event.repository.name }}
+          path: dist
 
   deploy:
     needs: build

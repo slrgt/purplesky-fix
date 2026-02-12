@@ -1,0 +1,22 @@
+---
+/**
+ * 404 page: same as index so GitHub Pages SPA fallback works (direct links to /post/xyz etc.).
+ */
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="PurpleSky">
+  <main id="main-content" class="app-shell">
+    <div id="root"></div>
+    <script>
+      async function boot() {
+        const { mountApp } = await import('../app/main');
+        mountApp(document.getElementById('root')!);
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', boot);
+      } else {
+        boot();
+      }
+    </script>
+  </main>
+</Layout>
