@@ -1,0 +1,144 @@
+.compose-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  padding: var(--space-md);
+}
+
+.compose-modal {
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow: auto;
+  border-radius: var(--glass-radius-md);
+  padding: var(--space-lg);
+}
+
+.compose-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+}
+
+.compose-title {
+  font-size: var(--font-lg);
+  font-weight: 700;
+  margin: 0;
+}
+
+.compose-close {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 4px 8px;
+  line-height: 1;
+}
+.compose-close:hover {
+  color: var(--text);
+}
+
+.compose-segment-tabs {
+  display: flex;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-sm);
+}
+
+.compose-segment-tab {
+  padding: 6px 12px;
+  border-radius: 100px;
+  border: 1px solid var(--glass-border);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: var(--font-xs);
+  cursor: pointer;
+}
+.compose-segment-tab:hover {
+  color: var(--text);
+}
+.compose-segment-tab.active {
+  background: var(--accent-subtle);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.compose-body {
+  margin-bottom: var(--space-md);
+}
+
+.compose-textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: var(--space-sm);
+  border-radius: var(--glass-radius-sm);
+  border: 1px solid var(--glass-border);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: var(--font-sm);
+  resize: vertical;
+  box-sizing: border-box;
+}
+.compose-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.compose-images {
+  margin-top: var(--space-sm);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  align-items: flex-start;
+}
+
+.compose-image-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--font-sm);
+  color: var(--muted);
+  cursor: pointer;
+}
+.compose-image-label input {
+  font-size: var(--font-xs);
+}
+
+.compose-image-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.compose-alt-input {
+  width: 120px;
+  padding: 4px 8px;
+  font-size: var(--font-xs);
+  border-radius: 6px;
+  border: 1px solid var(--glass-border);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.compose-error {
+  color: var(--danger);
+  font-size: var(--font-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.compose-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.compose-actions .btn-ghost {
+  margin-right: auto;
+}

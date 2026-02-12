@@ -1,0 +1,7 @@
+.rich-text-link {
+  color: var(--accent);
+  text-decoration: none;
+}
+.rich-text-link:hover {
+  text-decoration: none;
+}

@@ -1,0 +1,129 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Deploy to GitHub Pages with a CUSTOM DOMAIN (app at root)
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# Use this workflow when your GitHub Pages site uses a custom domain
+# (e.g. app.example.com) so the app is served at the root, not at /repo/.
+#
+# SETUP:
+#  1. In repo Settings → Pages, set your custom domain.
+#  2. Set the origin in this workflow (see CUSTOM_ORIGIN below).
+#  3. Enable this workflow: either trigger it manually or add a second branch.
+#
+# This workflow builds with VITE_BASE_PATH=/ and uploads the root of dist/
+# so that your domain serves index.html and /build/*.js at the root.
+
+name: Deploy to GitHub Pages (custom domain)
+
+on:
+  workflow_dispatch:
+    inputs:
+      origin:
+        description: 'App origin (e.g. https://app.example.com, no trailing slash)'
+        required: true
+        default: 'https://your-domain.com'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Install wasm-pack
+        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+
+      - name: Build WASM
+        run: cd wasm && wasm-pack build --target web --out-dir ../src/wasm-pkg
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Build for ROOT (custom domain). No subpath.
+      - name: Build
+        run: npx qwik build
+        env:
+          CI: true
+          NODE_OPTIONS: '--max-old-space-size=4096'
+          VITE_BASE_PATH: '/'
+          VITE_ORIGIN: ${{ github.event.inputs.origin || 'https://your-domain.com' }}
+
+      - name: Prepare dist for root deploy
+        run: |
+          # With base path '/', output may be in dist/ (index.html and build/ at top level)
+          # or in a nested folder. Find index.html and use that directory as the artifact root.
+          if [ -f "dist/index.html" ]; then
+            DEPLOY_DIR="dist"
+          elif [ -f "dist/build/index.html" ]; then
+            echo "::error::Unexpected layout: index.html inside dist/build/"
+            exit 1
+          else
+            # Some Qwik setups emit to dist/ with build/ alongside
+            DEPLOY_DIR="dist"
+          fi
+
+          if [ ! -f "$DEPLOY_DIR/index.html" ]; then
+            echo "::error::No index.html in $DEPLOY_DIR"
+            ls -la "$DEPLOY_DIR" || true
+            exit 1
+          fi
+
+          cp "$DEPLOY_DIR/index.html" "$DEPLOY_DIR/404.html"
+          touch "$DEPLOY_DIR/.nojekyll"
+
+          if [ -d "dist/build" ] && [ ! -d "$DEPLOY_DIR/build" ]; then
+            cp -r dist/build "$DEPLOY_DIR/build"
+          fi
+
+          ORIGIN="${{ github.event.inputs.origin || 'https://your-domain.com' }}"
+          cat > "$DEPLOY_DIR/client-metadata.json" <<EOJSON
+          {
+            "client_id": "${ORIGIN}/client-metadata.json",
+            "client_name": "PurpleSky",
+            "client_uri": "${ORIGIN}/",
+            "redirect_uris": ["${ORIGIN}/"],
+            "scope": "atproto transition:generic rpc:app.bsky.feed.getFeed?aud=did:web:api.bsky.app%23bsky_appview",
+            "grant_types": ["authorization_code", "refresh_token"],
+            "response_types": ["code"],
+            "token_endpoint_auth_method": "none",
+            "application_type": "web",
+            "dpop_bound_access_tokens": true
+          }
+          EOJSON
+
+          echo "=== Deploy dir contents ==="
+          ls -la "$DEPLOY_DIR"
+          echo "=== Build folder (first 10) ==="
+          ls "$DEPLOY_DIR/build" 2>/dev/null | head -10 || echo "No build/ folder"
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4

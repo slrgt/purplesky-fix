@@ -1,0 +1,104 @@
+/* ── Comment Thread – collapse gutter ─────────────────────────────────── */
+
+.ct-gutter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 28px;
+  flex-shrink: 0;
+  position: relative;
+  /* Align button with avatar */
+  padding-top: var(--ct-gutter-top, 9px);
+}
+
+/* Full-height continuous line (no gap between comments) */
+.ct-gutter::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  top: 0;
+  bottom: 0;
+  background: var(--border);
+  border-radius: 3px;
+  pointer-events: none;
+  transition: background 0.15s;
+}
+.ct-gutter:hover::before {
+  background: var(--accent);
+}
+
+/* ─ / + button at top of gutter, next to avatar */
+.ct-collapse-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+  min-width: auto;
+  min-height: auto;
+  transition: all 0.15s;
+  position: relative;
+  z-index: 1;
+}
+.ct-collapse-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-subtle);
+}
+
+/* Full-height clickable bar (wider hit area, line drawn by ::before) */
+.ct-collapse-bar {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  bottom: 0;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  min-width: auto;
+  min-height: auto;
+  z-index: 0;
+}
+
+/* ── Depth thread lines (for flat comment lists) ─────────────────────── */
+.ct-depth-line {
+  width: 28px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  border: none;
+  background: none;
+  min-width: auto;
+  min-height: auto;
+  position: relative;
+}
+.ct-depth-line::after {
+  content: '';
+  display: block;
+  width: 6px;
+  height: 100%;
+  background: var(--border);
+  border-radius: 3px;
+  transition: background 0.15s;
+}
+.ct-depth-line:hover::after {
+  background: var(--accent);
+}

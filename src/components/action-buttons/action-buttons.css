@@ -1,0 +1,77 @@
+/*
+ * Reusable action buttons: Like, Downvote, Reply
+ * Used on post cards, post detail, comments, forum replies.
+ */
+
+.action-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: var(--font-xs);
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  min-width: auto;
+  min-height: auto;
+  font-family: inherit;
+}
+
+.action-btn:hover {
+  background: var(--glass-hover);
+  color: var(--text);
+}
+
+.action-btn-active {
+  color: var(--error);
+}
+
+/* Upvote when active: positive color */
+.action-btn-upvote.action-btn-active {
+  color: var(--accent, #0ea5e9);
+}
+/* Heart (like) when active: red */
+.action-btn-heart.action-btn-active {
+  color: var(--error);
+}
+
+.action-btn.compact {
+  padding: 4px 6px;
+  font-size: 10px;
+}
+
+.action-btn svg {
+  flex-shrink: 0;
+}
+
+/* Count shown left of upvote, right of downvote */
+.action-btn .action-count {
+  min-width: 1.2em;
+  text-align: center;
+}
+
+/* Total score between upvote and downvote buttons */
+.action-score {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.8em;
+  padding: 0 4px;
+  font-size: var(--font-xs);
+  font-weight: 600;
+  color: var(--muted);
+}
+.action-bar .action-score {
+  margin: 0 2px;
+}

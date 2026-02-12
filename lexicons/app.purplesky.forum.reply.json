@@ -1,0 +1,29 @@
+{
+  "lexicon": 1,
+  "id": "app.purplesky.forum.reply",
+  "description": "A reply to a forum post. Supports threading via replyTo.",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": ["subject", "text", "createdAt"],
+        "properties": {
+          "subject": {
+            "type": "string",
+            "format": "at-uri",
+            "description": "AT-URI of the forum post this reply belongs to"
+          },
+          "replyTo": {
+            "type": "string",
+            "format": "at-uri",
+            "description": "AT-URI of the parent reply (for nested threading)"
+          },
+          "text": { "type": "string", "maxLength": 10000 },
+          "createdAt": { "type": "string", "format": "datetime" }
+        }
+      }
+    }
+  }
+}

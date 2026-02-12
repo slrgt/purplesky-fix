@@ -1,0 +1,22 @@
+[package]
+name = "purplesky-wasm"
+version = "0.1.0"
+edition = "2021"
+description = "WebAssembly modules for PurpleSky – feed sorting, vote counting, consensus math"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+# wasm-bindgen: bridge between Rust and JavaScript
+wasm-bindgen = "0.2"
+# serde: serialize/deserialize data passed between JS and WASM
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# js-sys: access JavaScript types from Rust
+js-sys = "0.3"
+
+[profile.release]
+# Optimize for small WASM binary size
+opt-level = "s"
+lto = true

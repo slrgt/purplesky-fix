@@ -1,0 +1,101 @@
+/* ── FollowBell – inline follow + notification bell ─────────────────────── */
+
+.follow-bell {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+/* Shared button base */
+.fb-follow,
+.fb-bell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: opacity 0.15s;
+  opacity: 0.5;
+  min-width: auto;
+  min-height: auto;
+}
+.fb-follow:hover,
+.fb-bell:hover {
+  opacity: 1;
+}
+
+/* Follow button */
+.fb-follow {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+.fb-follow.fb-following {
+  color: var(--muted);
+  opacity: 0.4;
+}
+.fb-follow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* Bell */
+.fb-bell {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  color: var(--muted);
+}
+.fb-bell.fb-bell-on {
+  opacity: 0.9;
+  color: var(--accent);
+}
+
+/* ── Compact variant (in post cards) ────────────────────────────────────── */
+.follow-bell-compact .fb-follow,
+.follow-bell-compact .fb-bell {
+  width: 16px;
+  height: 16px;
+}
+.follow-bell-compact .fb-bell svg {
+  width: 12px;
+  height: 12px;
+}
+.follow-bell-compact .fb-follow {
+  font-size: 11px;
+}
+
+/* Profile variant: text "Follow" / "Following" button */
+.follow-bell-profile .fb-follow-text {
+  width: auto;
+  height: auto;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+.follow-bell-profile .fb-follow-text:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-subtle);
+}
+.follow-bell-profile .fb-follow-text.fb-following {
+  opacity: 1;
+  color: var(--muted);
+}
+.follow-bell-profile .fb-follow-text.fb-following:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: var(--danger-subtle, rgba(200, 80, 80, 0.1));
+}

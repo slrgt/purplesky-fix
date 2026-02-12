@@ -1,0 +1,27 @@
+{
+  "lexicon": 1,
+  "id": "app.purplesky.forum.post",
+  "description": "A forum post / discussion thread stored on the user's PDS.",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": ["title", "body", "createdAt"],
+        "properties": {
+          "title": { "type": "string", "maxLength": 500 },
+          "body": { "type": "string", "maxLength": 50000 },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string", "maxLength": 100 },
+            "maxLength": 20
+          },
+          "isPinned": { "type": "boolean" },
+          "isWiki": { "type": "boolean" },
+          "createdAt": { "type": "string", "format": "datetime" }
+        }
+      }
+    }
+  }
+}

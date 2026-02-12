@@ -1,0 +1,47 @@
+{
+  "lexicon": 1,
+  "id": "app.purplesky.collab.project",
+  "description": "A collaboration project (Blender, Godot, or general). Full files stored externally; PDS stores metadata only.",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": ["name", "type", "owner", "createdAt"],
+        "properties": {
+          "name": { "type": "string", "maxLength": 256 },
+          "description": { "type": "string", "maxLength": 5000 },
+          "type": {
+            "type": "string",
+            "knownValues": ["blender", "godot", "general"],
+            "description": "Project type: blender, godot, or general"
+          },
+          "owner": { "type": "string", "format": "did" },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string", "maxLength": 100 },
+            "maxLength": 20
+          },
+          "version": { "type": "string", "maxLength": 50 },
+          "externalUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "Git LFS or cloud storage URL for full project files"
+          },
+          "magnetLink": {
+            "type": "string",
+            "maxLength": 2000,
+            "description": "Torrent v2 or hybrid magnet link for P2P distribution"
+          },
+          "previewUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL to lightweight preview (GLTF, HTML5 export, screenshot)"
+          },
+          "createdAt": { "type": "string", "format": "datetime" }
+        }
+      }
+    }
+  }
+}

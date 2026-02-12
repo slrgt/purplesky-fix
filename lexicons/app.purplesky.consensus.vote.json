@@ -1,0 +1,29 @@
+{
+  "lexicon": 1,
+  "id": "app.purplesky.consensus.vote",
+  "description": "A vote on a consensus statement (Polis-like agree/disagree/pass).",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": ["statement", "value", "createdAt"],
+        "properties": {
+          "statement": {
+            "type": "string",
+            "format": "at-uri",
+            "description": "AT-URI of the consensus statement being voted on"
+          },
+          "value": {
+            "type": "integer",
+            "minimum": -1,
+            "maximum": 1,
+            "description": "1 = agree, -1 = disagree, 0 = pass"
+          },
+          "createdAt": { "type": "string", "format": "datetime" }
+        }
+      }
+    }
+  }
+}

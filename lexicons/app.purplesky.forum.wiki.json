@@ -1,0 +1,31 @@
+{
+  "lexicon": 1,
+  "id": "app.purplesky.forum.wiki",
+  "description": "A wiki page promoted from a forum thread. Collaboratively editable.",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": ["title", "body", "createdAt"],
+        "properties": {
+          "sourcePost": {
+            "type": "string",
+            "format": "at-uri",
+            "description": "Original forum post this wiki was promoted from"
+          },
+          "title": { "type": "string", "maxLength": 500 },
+          "body": { "type": "string", "maxLength": 100000 },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string", "maxLength": 100 },
+            "maxLength": 20
+          },
+          "createdAt": { "type": "string", "format": "datetime" },
+          "lastEditedAt": { "type": "string", "format": "datetime" }
+        }
+      }
+    }
+  }
+}

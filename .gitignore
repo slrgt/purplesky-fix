@@ -1,0 +1,13 @@
+node_modules/
+dist/
+server/
+.vite/
+*.local
+.env
+.env.*
+.DS_Store
+Thumbs.db
+src/wasm-pkg/
+wasm/target/
+wasm/pkg/
+tmp/

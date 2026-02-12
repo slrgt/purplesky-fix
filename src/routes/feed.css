@@ -1,0 +1,255 @@
+/*
+ * Feed Page Styles
+ *
+ * HOW TO EDIT:
+ *  - To change the number of columns, the grid is controlled by CSS classes
+ *  - To change card spacing, edit the gap in .masonry-grid
+ *  - To change animation, edit the .feed-content-transition styles
+ */
+
+.feed-page {
+  width: 100%;
+}
+
+/* ── Controls Row ──────────────────────────────────────────────────────── */
+.feed-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.feed-controls-left,
+.feed-controls-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.col-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  font-size: var(--font-sm);
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--glass-highlight);
+  border: 1px solid var(--glass-border);
+  min-width: 32px;
+  min-height: 32px;
+  transition: all var(--transition-fast);
+}
+.col-btn:hover {
+  background: var(--glass-hover);
+}
+.col-btn-active {
+  background: var(--accent);
+  color: var(--text-on-accent);
+  border-color: var(--accent);
+}
+
+.sort-select {
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: var(--font-sm);
+  background: var(--glass-highlight);
+  border: 1px solid var(--glass-border);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.icon-btn-active {
+  color: var(--accent);
+  background: var(--accent-subtle);
+}
+
+.feed-mix-btn {
+  font-size: var(--font-sm);
+  padding: 4px 12px;
+}
+
+/* ── Masonry Grid ──────────────────────────────────────────────────────── */
+.masonry-grid {
+  display: flex;
+  gap: var(--space-md);
+  width: 100%;
+}
+
+.masonry-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  min-width: 0;
+}
+
+/* Single column: full width */
+.masonry-cols-1 {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ── States ────────────────────────────────────────────────────────────── */
+.feed-loading {
+  padding: var(--space-2xl);
+}
+
+.feed-error {
+  text-align: center;
+  padding: var(--space-xl);
+  color: var(--error);
+}
+.feed-error p {
+  margin-bottom: var(--space-md);
+}
+
+.feed-empty {
+  padding: var(--space-2xl);
+  color: var(--muted);
+  text-align: center;
+}
+
+.load-more {
+  padding: var(--space-lg);
+}
+
+/* ── Floating Feeds button (artsky-style, top center) ────────────────────── */
+.feeds-float-wrap {
+  position: fixed;
+  top: max(var(--space-md), env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.feeds-float-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 8px 14px 8px 18px;
+  border: none;
+  border-radius: 100px;
+  font-size: var(--font-sm);
+  font-weight: 500;
+}
+.feeds-float-btn:hover {
+  transform: scale(1.02);
+}
+.feeds-float-btn-active {
+  color: var(--accent);
+  background: var(--accent-subtle);
+}
+.feeds-float-label {
+  white-space: nowrap;
+}
+.feeds-float-chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--glass-highlight);
+  transition: transform var(--transition-fast);
+}
+.feeds-float-dropdown {
+  top: 100%;
+  margin-top: var(--space-sm);
+  left: 50%;
+  transform: translateX(-50%);
+  position: absolute;
+  width: min(320px, calc(100vw - 1.5rem));
+  max-width: calc(100vw - 1.5rem);
+  max-height: min(55vh, 420px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: var(--glass-radius-md);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(var(--glass-blur-strong));
+  -webkit-backdrop-filter: blur(var(--glass-blur-strong));
+  padding: var(--space-sm) var(--space-md);
+  z-index: 100;
+  box-shadow: var(--shadow-dropdown);
+}
+@media (max-width: 480px) {
+  .feeds-float-dropdown {
+    width: calc(100vw - 1rem);
+    max-width: calc(100vw - 1rem);
+    max-height: min(45vh, 320px);
+    padding: var(--space-xs) var(--space-sm);
+  }
+}
+.feed-selector-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 85;
+  background: transparent;
+}
+
+/* ── Floating "Hide Seen" Button (icon only), centered over Home tab ─────── */
+.hide-seen-fab {
+  position: fixed;
+  bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + var(--space-md) + var(--space-lg));
+  /* Center over the first nav tab (Home): nav is 50% - 50% width; first tab ~80px from left edge */
+  left: calc(50% - 165px);
+  transform: translateX(-50%);
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+}
+.hide-seen-fab:hover {
+  transform: translateX(-50%) scale(1.05);
+}
+.hide-seen-fab:active {
+  transform: translateX(-50%) scale(0.97);
+}
+
+/* ── Toast notification ────────────────────────────────────────────────── */
+.feed-toast {
+  position: fixed;
+  bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + var(--space-xl));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  padding: 10px 18px;
+  border-radius: 100px;
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--text);
+  box-shadow: var(--shadow-dropdown);
+  animation: feed-toast-in 0.2s ease-out;
+}
+@keyframes feed-toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* ── Responsive ────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .masonry-grid {
+    gap: var(--space-sm);
+  }
+  .masonry-column {
+    gap: var(--space-sm);
+  }
+  .feed-controls {
+    gap: var(--space-sm);
+  }
+}
