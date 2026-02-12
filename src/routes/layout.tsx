@@ -24,6 +24,7 @@ import { useAppProvider, useAppState } from '~/context/app-context';
 import type { ThemeMode, CardViewMode } from '~/lib/types';
 
 import { ComposeModal } from '~/components/compose-modal/compose-modal';
+import { getBasePath, withBase } from '~/lib/path';
 import './layout.css';
 
 /** Route sync runs only once per page load to avoid loops on static hosts (e.g. GitHub Pages). */
@@ -64,7 +65,7 @@ export default component$(() => {
   // ── Service worker update (GitHub Pages: prompt refresh when new version is waiting) ───
   useVisibleTask$(({ cleanup }) => {
     if (typeof navigator === 'undefined' || !navigator.serviceWorker) return;
-    const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '') || '';
+    const base = getBasePath();
     const scope = base ? `${base}/` : '/';
     const ref = { reg: null as ServiceWorkerRegistration | null, aborted: false };
     const onControllerChange = () => window.location.reload();
@@ -227,17 +228,13 @@ export default component$(() => {
       const isOAuthCallback = params.has('state') && (params.has('code') || params.has('error'));
       if (isOAuthCallback) return;
       const pathname = window.location.pathname;
-      const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '') || '';
+      const base = getBasePath();
       const pathAfterBase = base && pathname.startsWith(base) ? pathname.slice(base.length) || '/' : pathname;
       const isHome = pathAfterBase === '/' || pathAfterBase === '' || pathname === base || pathname === base + '/';
       if (isHome) return;
       routeSyncState.done = true;
       const cleanSearch = window.location.search;
-      // Pass full path WITH base: Qwik's nav() resolves via new URL(path, currentUrl), so a path-only
-      // value like "/post/xyz/" becomes origin + path = /post/xyz/ (wrong on GitHub Pages). We must
-      // pass base + path so the resolved URL stays under the app (e.g. /purplesky/post/xyz/).
-      const pathWithBase = base ? (pathAfterBase === '/' || pathAfterBase === '' ? `${base}/` : `${base}${pathAfterBase}`) : (pathAfterBase || '/');
-      const target = pathWithBase + cleanSearch + window.location.hash;
+      const target = withBase(pathAfterBase || '/') + cleanSearch + window.location.hash;
       await nav(target);
     } catch { /* ignore route sync errors */ }
   });
@@ -428,7 +425,7 @@ export default component$(() => {
       // Q = go back (except on feed page where it's handled by feed nav)
       if (key === 'q' && e.key !== 'Backspace') {
         const pathname = loc.url.pathname;
-        const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '') || '';
+        const base = getBasePath();
         const pathAfterBase = base && pathname.startsWith(base) ? pathname.slice(base.length) || '/' : pathname;
         const pathForBack = pathAfterBase || '/';
         if (pathForBack !== '/' && !pathForBack.startsWith('/feed')) {
@@ -452,15 +449,14 @@ export default component$(() => {
   ];
 
   const pathname = loc.url.pathname;
-  const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '') || '';
-  // pathAfterBase: path relative to app base (Qwik may give pathname with or without base depending on context)
+  const base = getBasePath();
   const pathAfterBase = base && pathname.startsWith(base) ? pathname.slice(base.length) || '/' : pathname;
   const isHome = pathAfterBase === '/' || pathAfterBase === '';
   const searchParams = new URLSearchParams(loc.url.search);
   const isOAuthCallback = searchParams.has('state') && (searchParams.has('code') || searchParams.has('error'));
   const showBackButton = !isHome && !isOAuthCallback;
-  /** Full href for nav items (include base so bottom nav works when deployed at subpath) */
-  const navHref = (path: string) => (path === '/' ? `${base}/` : `${base}${path}`);
+  /** Full href for nav items (absolute path with base for subpath deploy) */
+  const navHref = (path: string) => withBase(path);
   /** Path for matching active tab (compare segment after base to item.href) */
   const pathForActive = pathAfterBase;
 
@@ -879,7 +875,7 @@ export default component$(() => {
             class="glass"
             style={{ padding: '4px 12px', borderRadius: '20px', fontWeight: 600, fontSize: 'var(--font-xs)' }}
             onClick$={async () => {
-              const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '') || '';
+              const base = getBasePath();
               const scope = base ? `${base}/` : '/';
               const reg = await navigator.serviceWorker.getRegistration(scope);
               if (reg?.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
