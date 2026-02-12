@@ -20,7 +20,8 @@
  */
 
 import { component$, useSignal, useVisibleTask$, $ } from '@builder.io/qwik';
-import { Link, useLocation } from '@builder.io/qwik-city';
+import { useLocation } from '@builder.io/qwik-city';
+import { Link } from '~/components/app-link/app-link';
 import { useAppState } from '~/context/app-context';
 import { ActionBar } from '~/components/action-buttons/action-buttons';
 import { FollowBell } from '~/components/follow-bell/follow-bell';

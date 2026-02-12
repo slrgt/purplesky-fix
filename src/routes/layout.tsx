@@ -18,7 +18,8 @@
  */
 
 import { component$, Slot, useVisibleTask$, useSignal, $ } from '@builder.io/qwik';
-import { Link, useLocation, useNavigate } from '@builder.io/qwik-city';
+import { useLocation, useNavigate } from '@builder.io/qwik-city';
+import { Link } from '~/components/app-link/app-link';
 import { useAppProvider, useAppState } from '~/context/app-context';
 import type { ThemeMode, CardViewMode } from '~/lib/types';
 

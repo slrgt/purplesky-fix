@@ -20,7 +20,8 @@
  */
 
 import { component$, useSignal, useVisibleTask$, $ } from '@builder.io/qwik';
-import { Link, useLocation, useNavigate } from '@builder.io/qwik-city';
+import { useLocation, useNavigate } from '@builder.io/qwik-city';
+import { Link } from '~/components/app-link/app-link';
 import { RichText } from '~/components/rich-text/rich-text';
 import { useAppState } from '~/context/app-context';
 import { withBase } from '~/lib/path';

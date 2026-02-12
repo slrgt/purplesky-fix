@@ -4,7 +4,7 @@
  */
 
 import { component$ } from '@builder.io/qwik';
-import { Link } from '@builder.io/qwik-city';
+import { Link } from '~/components/app-link/app-link';
 import { withBase } from '~/lib/path';
 
 import './rich-text.css';

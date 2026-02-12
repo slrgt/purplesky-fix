@@ -21,7 +21,8 @@
  */
 
 import { component$, useSignal, useVisibleTask$, type QRL } from '@builder.io/qwik';
-import { Link, useNavigate } from '@builder.io/qwik-city';
+import { useNavigate } from '@builder.io/qwik-city';
+import { Link } from '~/components/app-link/app-link';
 import type { TimelineItem, CardViewMode } from '~/lib/types';
 import { withBase } from '~/lib/path';
 import { resizedAvatarUrl } from '~/lib/image-utils';

@@ -22,7 +22,7 @@
  */
 
 import { component$, useSignal, useStore, useVisibleTask$, $ } from '@builder.io/qwik';
-import { Link } from '@builder.io/qwik-city';
+import { Link } from '~/components/app-link/app-link';
 import { withBase } from '~/lib/path';
 import { useAppState } from '~/context/app-context';
 import type { ForumPost } from '~/lib/types';

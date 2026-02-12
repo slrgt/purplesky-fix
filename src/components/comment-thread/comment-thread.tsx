@@ -25,7 +25,7 @@ import { withBase } from '~/lib/path';
 import { ActionBar } from '~/components/action-buttons/action-buttons';
 import { FollowBell } from '~/components/follow-bell/follow-bell';
 import { RichText } from '~/components/rich-text/rich-text';
-import { Link } from '@builder.io/qwik-city';
+import { Link } from '~/components/app-link/app-link';
 
 import './comment-thread.css';
 

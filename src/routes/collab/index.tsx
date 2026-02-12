@@ -21,7 +21,7 @@
  */
 
 import { component$, useSignal, useStore, useVisibleTask$, $ } from '@builder.io/qwik';
-import { Link } from '@builder.io/qwik-city';
+import { Link } from '~/components/app-link/app-link';
 import { useAppState } from '~/context/app-context';
 import type { CollabProject } from '~/lib/types';
 

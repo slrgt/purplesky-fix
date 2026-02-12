@@ -4,7 +4,7 @@
  */
 
 import { component$, useSignal, $ } from '@builder.io/qwik';
-import { Link } from '@builder.io/qwik-city';
+import { Link } from '~/components/app-link/app-link';
 
 import './action-buttons.css';
 
